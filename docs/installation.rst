@@ -8,7 +8,7 @@ Installation
 Stable release
 --------------
 
-To install opencdms, run this command in your terminal:
+To install pyopencdms, run this command in your terminal:
 
 .. code-block:: console
 
@@ -32,13 +32,13 @@ You can either clone the public repository:
 
 .. code-block:: console
 
-    $ git clone git://github.com/opencdms/opencdms
+    $ git clone git://github.com/opencdms/pyopencdms
 
 Or download the `tarball`_:
 
 .. code-block:: console
 
-    $ curl -OJL https://github.com/opencdms/opencdms/tarball/master
+    $ curl -OJL https://github.com/opencdms/pyopencdms/tarball/main
 
 Once you have a copy of the source, you can install it with:
 
@@ -47,5 +47,5 @@ Once you have a copy of the source, you can install it with:
     $ python setup.py install
 
 
-.. _Github repo: https://github.com/opencdms/opencdms
-.. _tarball: https://github.com/opencdms/opencdms/tarball/master
+.. _Github repo: https://github.com/opencdms/pyopencdms
+.. _tarball: https://github.com/opencdms/pyopencdms/tarball/master
