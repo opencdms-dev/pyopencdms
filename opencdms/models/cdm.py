@@ -30,7 +30,7 @@ from typing import NewType, Optional
 Geography = NewType("Geography", str)
 
 
-class OpenCDMSBase(abc.ABC):
+class DomainModelBase(abc.ABC):
     """
     Base class for OpenCDMS domain models.
 
@@ -46,7 +46,7 @@ class OpenCDMSBase(abc.ABC):
 
 
 @dataclass
-class ObservationType(OpenCDMSBase):
+class ObservationType(DomainModelBase):
     id: int
     name: str
     description: str
@@ -60,7 +60,7 @@ class ObservationType(OpenCDMSBase):
     _comment = ""
 
 
-class FeatureType(OpenCDMSBase):
+class FeatureType(DomainModelBase):
     id: int
     name: str
     description: str
@@ -75,7 +75,7 @@ class FeatureType(OpenCDMSBase):
 
 
 @dataclass
-class User(OpenCDMSBase):
+class User(DomainModelBase):
     id: str
     name: str
     _comments = {
@@ -86,7 +86,7 @@ class User(OpenCDMSBase):
 
 
 @dataclass
-class ObservedProperty(OpenCDMSBase):
+class ObservedProperty(DomainModelBase):
     id: int
     short_name: str
     standard_name: Optional[str]
@@ -105,7 +105,7 @@ class ObservedProperty(OpenCDMSBase):
 
 
 @dataclass
-class ObservingProcedure(OpenCDMSBase):
+class ObservingProcedure(DomainModelBase):
     id: int
     name: str
     description: str
@@ -120,7 +120,7 @@ class ObservingProcedure(OpenCDMSBase):
 
 
 @dataclass
-class RecordStatus(OpenCDMSBase):
+class RecordStatus(DomainModelBase):
     id: int
     name: str
     description: str
@@ -133,7 +133,7 @@ class RecordStatus(OpenCDMSBase):
 
 
 @dataclass
-class Host(OpenCDMSBase):
+class Host(DomainModelBase):
     id: str
     name: str
     description: Optional[str]
@@ -142,7 +142,7 @@ class Host(OpenCDMSBase):
     elevation: Optional[float]
     wigos_station_identifier: Optional[str]
     facility_type: Optional[str]
-    date_established: Optional[str]
+    date_established: Optional[datetime]
     wmo_region: Optional[str]
     territory: Optional[str]
     valid_from: Optional[datetime]
@@ -176,7 +176,7 @@ class Host(OpenCDMSBase):
 
 
 @dataclass
-class Observer(OpenCDMSBase):
+class Observer(DomainModelBase):
     id: str
     name: str
     description: str
@@ -195,7 +195,7 @@ class Observer(OpenCDMSBase):
 
 
 @dataclass
-class Collection(OpenCDMSBase):
+class Collection(DomainModelBase):
     id: str
     name: str
     link: Optional[str]
@@ -208,7 +208,7 @@ class Collection(OpenCDMSBase):
 
 
 @dataclass
-class Feature(OpenCDMSBase):
+class Feature(DomainModelBase):
     id: str
     type_id: int
     geometry: Geography
@@ -231,7 +231,7 @@ class Feature(OpenCDMSBase):
 
 
 @dataclass
-class Source(OpenCDMSBase):
+class Source(DomainModelBase):
     id: str
     name: str
     link: Optional[str]
@@ -244,7 +244,7 @@ class Source(OpenCDMSBase):
 
 
 @dataclass
-class Observation(OpenCDMSBase):
+class Observation(DomainModelBase):
     id: str
     location: Geography
     elevation: Optional[float]

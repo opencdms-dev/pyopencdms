@@ -157,7 +157,7 @@ hosts = Table(
     ),
     Column(
         "date_established",
-        String,
+        DateTime(timezone=True),
         comment="Date host was first established",
         index=False,
     ),
