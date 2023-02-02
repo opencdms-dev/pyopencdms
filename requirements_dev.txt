@@ -2,6 +2,7 @@ black
 flake8
 tox
 Sphinx
+sphinxcontrib-mermaid
 sphinx-mdinclude
 twine
 pytest
