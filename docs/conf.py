@@ -35,6 +35,7 @@ import opencdms
 extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.viewcode",
+    "sphinxcontrib.mermaid",
     "sphinx_mdinclude",
 ]
 
