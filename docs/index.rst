@@ -5,9 +5,8 @@ Welcome to opencdms's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   readme
-   installation
    overview
+   installation
    usage
    contributing
    authors
