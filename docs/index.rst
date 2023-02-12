@@ -8,6 +8,7 @@ Welcome to opencdms's documentation!
    overview
    installation
    usage
+   datamodel
    contributing
    authors
    history
