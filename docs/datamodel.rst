@@ -25,7 +25,7 @@ Views can be utilized for on-the-fly transformations, such as adjusting the data
 
 OpenCDMS splits base tables into layers
 
-- Climate Data Model (storage and transfer - can be used independently)
+- Climate Data Model (storage and exchange - can be used independently)
 - Application database (user / application configuration)
 - Derived tables
 - Access control (applied to all layers)
