@@ -1,49 +1,39 @@
-============================
-OpenCDMS Physical Data Model
-============================
+=====================================
+OpenCDMS Physical Data Model Overview
+=====================================
 
-The OpenCDMS physical data model is broken into two distinct types: base tables and derived tables.
+The OpenCDMS physical data model is conceptualized in layers made up of base tables and derived tables.
 
-Base tables
-===========
+The data model currently consists of the following layers:
 
-Base tables contain the actual data in the database and are managed using database migration tools. These tables are the foundation of the data model and represent the persistent, underlying data storage in your database. The use of a database migration tool is essential for maintaining the integrity and consistency of the database over time as the underlying data and structure of the database changes. These tools provide a means of making these changes in a controlled, predictable, and repeatable manner.
+Climate Data Model
+==================
+
+This layer contains our implementation of the WMO Climate Data Model Standard.
+This layer can be used independently of the other layers and can either be realised as
+a relational database for long-term storage and management
+or as a set of files for data exchange.
+
+Application database
+====================
+
+This layer contains user specific information and application configuration. It is only
+required if OpenCDMS is being used as a web application. It is possible to interact with
+the Climate Data Model layer without requiring this or other layers.
 
 Derived tables
 ==============
 
-Derived tables, on the other hand, do not contain data themselves but are instead represented by views in the database. These views provide a simplified, virtual representation of the data in the base tables and are used to improve the accessibility and performance of the data. Derived tables provide several benefits:
+The derived tables layer consists of a set of tables that are derived from the base tables.
+These tables do not store data directly and are implemented as views in the database.
 
-- Abstraction: A view provides an abstraction layer that can hide the underlying complexity of the data and the logic used to access it. This can simplify the application's interaction with the database and reduce the risk of making mistakes.
-- Performance: In some cases, creating a view can improve performance. For example, if you have a complex SELECT statement that is used frequently, creating a view can help the database optimize the execution of the statement by compiling it and storing the execution plan. This can result in faster execution times compared to executing the statement each time it is needed.
-- Security: Views can be used to enforce security and data privacy. You can create views that restrict access to sensitive data, for example by only displaying a subset of columns or rows.
-- Simplicity: Views can simplify the data model and make it easier to understand. By providing a high-level, simplified representation of the data, views can reduce the complexity of the underlying data structures and the logic used to access them.
+There are two occassions where derived tables are used:
 
-Overall, the use of derived tables can lead to a more maintainable, secure, and performant database design.
+- To assist with the creation of products and services that are derived from the Climate Data Model
+- To transform other supported CDMS data models so that they look at behave like their OpenCDMS equivalent
 
-Views can be utilized for on-the-fly transformations, such as adjusting the data model of another CDMS to match the Climate Data Model. They can also be used for generating products, such as an summarising data for an inventory plot.
+Access control
+==============
 
-OpenCDMS splits base tables into layers
-
-- Climate Data Model (storage and exchange - can be used independently)
-- Application database (user / application configuration)
-- Derived tables
-- Access control (applied to all layers)
-
-Versioning only occurs if the provider supports versioning.
-
-
-Providers
-=========
-
-Provider plugins are listed below along with a summary of the capabilities that will, in the future, be available when using that provider.
-
-.. csv-table::
-   :header: Provider, Read, Write, Versioning
-   :align: left
-
-   opencdmsdb,✅,✅,✅
-   surface,✅,✅,❌
-   climsoft,✅,❌,❌
-   clide,✅,❌,❌
-
+The final layer contains additional tables that are required to support access control. Access control
+is applied to all other layers.
