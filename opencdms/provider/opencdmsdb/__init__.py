@@ -63,8 +63,8 @@ feature_type = Table(
 )
 
 
-users = Table(
-    "users",
+user = Table(
+    "user",
     mapper_registry.metadata,
     Column("id", String, comment="ID / primary key", primary_key=True, index=False),
     Column("name", String, comment="Name of user", index=False),
@@ -106,8 +106,8 @@ record_status = Table(
 )
 
 
-time_zones = Table(
-    "time_zones",
+time_zone = Table(
+    "time_zone",
     mapper_registry.metadata,
     Column("id", Integer, comment="ID / primary key", primary_key=True, index=False),
     Column("abbreviation", String, comment="Abbreviation for time zone", index=False),
@@ -117,8 +117,8 @@ time_zones = Table(
 )
 
 
-hosts = Table(
-    "hosts",
+host = Table(
+    "host",
     mapper_registry.metadata,
     Column("id", String, comment="ID / primary key", primary_key=True, index=False),
     Column("name", String, comment="Preferred name of host", index=False),
@@ -136,16 +136,16 @@ hosts = Table(
     Column("valid_to", DateTime(timezone=True), comment="Date after which the details for this record are no longer valid", index=False),
     Column("version", Integer, comment="Version number of this record", index=False),
     Column("change_date", DateTime(timezone=True), comment="Date this record was changed", index=False),
-    Column("user_id",ForeignKey("cdm.users.id"), comment="Which user last modified this record", index=False),
+    Column("user_id",ForeignKey("cdm.user.id"), comment="Which user last modified this record", index=False),
     Column("status_id",ForeignKey("cdm.record_status.id"), comment="Whether this is the latest version or an archived version of the record", index=False),
     Column("comments", String, comment="Free text comments on this record, for example description of changes made etc", index=False),
-    Column("time_zone_id",ForeignKey("cdm.time_zones.id"), comment="Time zone the host is located in", index=False),
+    Column("time_zone_id",ForeignKey("cdm.time_zone.id"), comment="Time zone the host is located in", index=False),
     schema="cdm"
 )
 
 
-observers = Table(
-    "observers",
+observer = Table(
+    "observer",
     mapper_registry.metadata,
     Column("id", String, comment="ID / primary key", primary_key=True, index=False),
     Column("name", String, comment="Name of sensor", index=False),
@@ -163,8 +163,8 @@ observers = Table(
 )
 
 
-collections = Table(
-    "collections",
+collection = Table(
+    "collection",
     mapper_registry.metadata,
     Column("id", String, comment="ID / primary key", primary_key=True, index=False),
     Column("name", String, comment="Name of collection", index=False),
@@ -173,14 +173,14 @@ collections = Table(
 )
 
 
-features = Table(
-    "features",
+feature = Table(
+    "feature",
     mapper_registry.metadata,
     Column("id", String, comment="ID / primary key", primary_key=True, index=False),
     Column("type_id",ForeignKey("cdm.feature_type.id"), comment="enumerated feature type", index=False),
     Column("geometry", Geography, comment="", index=False),
     Column("elevation", Numeric, comment="Elevation of feature above mean sea level", index=False),
-    Column("parent_id",ForeignKey("cdm.features.id"), comment="Parent feature for this feature if nested", index=False),
+    Column("parent_id",ForeignKey("cdm.feature.id"), comment="Parent feature for this feature if nested", index=False),
     Column("name", String, comment="Name of feature", index=False),
     Column("description", String, comment="Description of feature", index=False),
     Column("links", JSONB, comment="Link(s) to further information on feature", index=False),
@@ -201,7 +201,7 @@ source = Table(
     "source",
     mapper_registry.metadata,
     Column("id", String, comment="ID / primary key", primary_key=True, index=False),
-    Column("source_type_id",ForeignKey("cdm.source_types.id"), comment="The type of source", primary_key=True, index=False),
+    Column("source_type_id",ForeignKey("cdm.source_type.id"), comment="The type of source", primary_key=True, index=False),
     Column("name", String, comment="Name of source", index=False),
     Column("links", JSONB, comment="Link(s) to further information on source", index=False),
     Column("processor", String, comment="Name of processor used to ingest the data", index=False),
@@ -209,8 +209,8 @@ source = Table(
 )
 
 
-observations = Table(
-    "observations",
+observation = Table(
+    "observation",
     mapper_registry.metadata,
     Column("id", String, comment="ID / primary key", primary_key=True, index=False),
     Column("location", Geography, comment="Location of observation", index=True),
@@ -225,17 +225,17 @@ observations = Table(
     Column("result_time", DateTime(timezone=True), comment="Time that the result became available", index=False),
     Column("valid_from", DateTime(timezone=True), comment="Time that the result starts to be valid", index=False),
     Column("valid_to", DateTime(timezone=True), comment="Time after which the result is no longer valid", index=False),
-    Column("host_id",ForeignKey("cdm.hosts.id"), comment="Host associated with making the observation, equivalent to OGC OMS 'host'", index=False),
-    Column("observer_id",ForeignKey("cdm.observers.id"), comment="Observer associated with making the observation, equivalent to OGC OMS 'observer'", index=False),
+    Column("host_id",ForeignKey("cdm.host.id"), comment="Host associated with making the observation, equivalent to OGC OMS 'host'", index=False),
+    Column("observer_id",ForeignKey("cdm.observer.id"), comment="Observer associated with making the observation, equivalent to OGC OMS 'observer'", index=False),
     Column("observed_property_id",ForeignKey("cdm.observed_property.id"), comment="The phenomenon, or thing, being observed", index=True),
     Column("observing_procedure_id",ForeignKey("cdm.observing_procedure.id"), comment="Procedure used to make the observation", index=False),
     Column("report_id", String, comment="Parent report ID, used to link coincident observations together", index=False),
-    Column("collection_id",ForeignKey("cdm.collections.id"), comment="Primary collection or dataset that this observation belongs to", index=True),
+    Column("collection_id",ForeignKey("cdm.collection.id"), comment="Primary collection or dataset that this observation belongs to", index=True),
     Column("parameter", JSONB, comment="List of key/ value pairs in dict", index=False),
-    Column("feature_of_interest_id",ForeignKey("cdm.features.id"), comment="Feature that this observation is associated with", index=False),
+    Column("feature_of_interest_id",ForeignKey("cdm.feature.id"), comment="Feature that this observation is associated with", index=False),
     Column("version", Integer, comment="Version number of this record", index=False),
     Column("change_date", DateTime(timezone=True), comment="Date this record was changed", index=False),
-    Column("user_id",ForeignKey("cdm.users.id"), comment="Which user last modified this record", index=False),
+    Column("user_id",ForeignKey("cdm.user.id"), comment="Which user last modified this record", index=False),
     Column("status_id",ForeignKey("cdm.record_status.id"), comment="Whether this is the latest version or an archived version of the record", index=False),
     Column("comments", String, comment="Free text comments on this record, for example description of changes made etc", index=False),
     Column("source_id",ForeignKey("cdm.source.id"), comment="The source of this record", index=True),
@@ -246,16 +246,16 @@ observations = Table(
 def start_mappers():
     mapper_registry.map_imperatively(cdm.ObservationType, observation_type)
     mapper_registry.map_imperatively(cdm.FeatureType, feature_type)
-    mapper_registry.map_imperatively(cdm.User, users)
+    mapper_registry.map_imperatively(cdm.User, user)
     mapper_registry.map_imperatively(cdm.ObservedProperty, observed_property)
     mapper_registry.map_imperatively(cdm.ObservingProcedure, observing_procedure)
     mapper_registry.map_imperatively(cdm.RecordStatus, record_status)
-    mapper_registry.map_imperatively(cdm.TimeZone, time_zones)
-    mapper_registry.map_imperatively(cdm.Host,hosts)
-    mapper_registry.map_imperatively(cdm.Observer, observers)
-    mapper_registry.map_imperatively(cdm.Collection, collections)
-    mapper_registry.map_imperatively(cdm.Feature,features)
+    mapper_registry.map_imperatively(cdm.TimeZone, time_zone)
+    mapper_registry.map_imperatively(cdm.Host, host)
+    mapper_registry.map_imperatively(cdm.Observer, observer)
+    mapper_registry.map_imperatively(cdm.Collection, collection)
+    mapper_registry.map_imperatively(cdm.Feature, feature)
     mapper_registry.map_imperatively(cdm.SourceType, source_type)
-    mapper_registry.map_imperatively(cdm.Source,source)
-    mapper_registry.map_imperatively(cdm.Observation,observations)
+    mapper_registry.map_imperatively(cdm.Source, source)
+    mapper_registry.map_imperatively(cdm.Observation, observation)
 
