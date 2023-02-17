@@ -251,43 +251,11 @@ def start_mappers():
     mapper_registry.map_imperatively(cdm.ObservingProcedure, observing_procedure)
     mapper_registry.map_imperatively(cdm.RecordStatus, record_status)
     mapper_registry.map_imperatively(cdm.TimeZone, time_zones)
-    mapper_registry.map_imperatively(
-        cdm.Host,
-        hosts,
-        properties = {
-            "users_": relationship("Users",back_populates="users"),
-            "record_status_": relationship("RecordStatus",back_populates="record_status"),
-            "time_zones_": relationship("TimeZones",back_populates="time_zones"),
-        })
+    mapper_registry.map_imperatively(cdm.Host,hosts)
     mapper_registry.map_imperatively(cdm.Observer, observers)
     mapper_registry.map_imperatively(cdm.Collection, collections)
-    mapper_registry.map_imperatively(
-        cdm.Feature,
-        features,
-        properties = {
-            "feature_type_": relationship("FeatureType",back_populates="feature_type"),
-            "features_": relationship("Features",back_populates="features"),
-        })
+    mapper_registry.map_imperatively(cdm.Feature,features)
     mapper_registry.map_imperatively(cdm.SourceType, source_type)
-    mapper_registry.map_imperatively(
-        cdm.Source,
-        source,
-        properties = {
-            "source_types_": relationship("SourceTypes",back_populates="source_types"),
-        })
-    mapper_registry.map_imperatively(
-        cdm.Observation,
-        observations,
-        properties = {
-            "observation_type_": relationship("ObservationType",back_populates="observation_type"),
-            "hosts_": relationship("Hosts",back_populates="hosts"),
-            "observers_": relationship("Observers",back_populates="observers"),
-            "observed_property_": relationship("ObservedProperty",back_populates="observed_property"),
-            "observing_procedure_": relationship("ObservingProcedure",back_populates="observing_procedure"),
-            "collections_": relationship("Collections",back_populates="collections"),
-            "features_": relationship("Features",back_populates="features"),
-            "users_": relationship("Users",back_populates="users"),
-            "record_status_": relationship("RecordStatus",back_populates="record_status"),
-            "source_": relationship("Source",back_populates="source"),
-        })
+    mapper_registry.map_imperatively(cdm.Source,source)
+    mapper_registry.map_imperatively(cdm.Observation,observations)
 
