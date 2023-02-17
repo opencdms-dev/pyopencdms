@@ -201,7 +201,7 @@ source = Table(
     "source",
     mapper_registry.metadata,
     Column("id", String, comment="ID / primary key", primary_key=True, index=False),
-    Column("source_type_id",ForeignKey("cdm.source_type.id"), comment="The type of source", primary_key=True, index=False),
+    Column("source_type_id",ForeignKey("cdm.source_type.id"), comment="The type of source", index=False),
     Column("name", String, comment="Name of source", index=False),
     Column("links", JSONB, comment="Link(s) to further information on source", index=False),
     Column("processor", String, comment="Name of processor used to ingest the data", index=False),
