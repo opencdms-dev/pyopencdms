@@ -106,6 +106,17 @@ record_status = Table(
 )
 
 
+time_zone = Table(
+    "time_zone",
+    mapper_registry.metadata,
+    Column("id", Integer, comment="ID / primary key", primary_key=True, index=False),
+    Column("abbreviation", String, comment="Abbreviation for time zone", index=False),
+    Column("name", String, comment="Name / description of timezone", index=False),
+    Column("offset", String, comment="Offset from UTC", index=False),
+    schema="cdm"
+)
+
+
 hosts = Table(
     "hosts",
     mapper_registry.metadata,
@@ -239,6 +250,7 @@ def start_mappers():
     mapper_registry.map_imperatively(cdm.ObservedProperty, observed_property)
     mapper_registry.map_imperatively(cdm.ObservingProcedure, observing_procedure)
     mapper_registry.map_imperatively(cdm.RecordStatus, record_status)
+    mapper_registry.map_imperatively(cdm.TimeZone, time_zone)
     mapper_registry.map_imperatively(
         cdm.Host,
         hosts,

@@ -131,6 +131,21 @@ class RecordStatus(DomainModelBase):
 
 
 @dataclass
+class TimeZone(DomainModelBase):
+    id: int
+    abbreviation: str
+    name: str
+    offset: str
+    _comments = {
+        "id": "ID / primary key",
+        "abbreviation": "Abbreviation for time zone",
+        "name": "Name / description of timezone",
+        "offset": "Offset from UTC"
+    }
+    _comment = "placeholder"
+
+
+@dataclass
 class Host(DomainModelBase):
     id: str
     name: str
