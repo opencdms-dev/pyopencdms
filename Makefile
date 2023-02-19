@@ -83,3 +83,15 @@ dist: clean ## builds source and wheel package
 
 install: clean ## install the package to the active Python's site-packages
 	python setup.py install
+
+
+test-prepare: ## Step up db containers needed for tests
+	opencdms-test-data startdb
+	sleep 20
+
+test: test-prepare ## run tests quickly with the default Python
+	pytest
+
+test-done: ## Bring down docker containers after test
+	opencdms-test-data stopdb
+
