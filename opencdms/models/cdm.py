@@ -22,7 +22,7 @@
 # SOFTWARE.
 # =============================================================================
 from abc import ABC as AbstractBase
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
 from typing import NewType, Optional
 
@@ -42,7 +42,7 @@ class DomainModelBase(AbstractBase):
         return self._comments.get(column)
 
 
-@dataclass
+@dataclass(kw_only=True)
 class ObservationType(DomainModelBase):
     id: int
     name: str
@@ -57,7 +57,7 @@ class ObservationType(DomainModelBase):
     _comment = "placeholder"
 
 
-@dataclass
+@dataclass(kw_only=True)
 class FeatureType(DomainModelBase):
     id: int
     name: str
@@ -72,7 +72,7 @@ class FeatureType(DomainModelBase):
     _comment = "placeholder"
 
 
-@dataclass
+@dataclass(kw_only=True)
 class User(DomainModelBase):
     id: str
     name: str
@@ -83,7 +83,7 @@ class User(DomainModelBase):
     _comment = "placeholder"
 
 
-@dataclass
+@dataclass(kw_only=True)
 class ObservedProperty(DomainModelBase):
     id: int
     short_name: str
@@ -102,7 +102,7 @@ class ObservedProperty(DomainModelBase):
     _comment = "placeholder"
 
 
-@dataclass
+@dataclass(kw_only=True)
 class ObservingProcedure(DomainModelBase):
     id: int
     name: str
@@ -117,7 +117,7 @@ class ObservingProcedure(DomainModelBase):
     _comment = "placeholder"
 
 
-@dataclass
+@dataclass(kw_only=True)
 class RecordStatus(DomainModelBase):
     id: int
     name: str
@@ -130,7 +130,7 @@ class RecordStatus(DomainModelBase):
     _comment = "placeholder"
 
 
-@dataclass
+@dataclass(kw_only=True)
 class TimeZone(DomainModelBase):
     id: int
     abbreviation: str
@@ -145,7 +145,7 @@ class TimeZone(DomainModelBase):
     _comment = "placeholder"
 
 
-@dataclass
+@dataclass(kw_only=True)
 class Host(DomainModelBase):
     id: str
     name: str
@@ -192,7 +192,7 @@ class Host(DomainModelBase):
     _comment = "wmdr.observing_facility"
 
 
-@dataclass
+@dataclass(kw_only=True)
 class Observer(DomainModelBase):
     id: str
     name: str
@@ -223,7 +223,7 @@ class Observer(DomainModelBase):
     _comment = "wmdr.equipment"
 
 
-@dataclass
+@dataclass(kw_only=True)
 class Collection(DomainModelBase):
     id: str
     name: str
@@ -236,7 +236,7 @@ class Collection(DomainModelBase):
     _comment = "placeholder"
 
 
-@dataclass
+@dataclass(kw_only=True)
 class Feature(DomainModelBase):
     id: str
     type_id: int
@@ -259,7 +259,7 @@ class Feature(DomainModelBase):
     _comment = "table to contain definition of different geographic features"
 
 
-@dataclass
+@dataclass(kw_only=True)
 class SourceType(DomainModelBase):
     id: str
     description: Optional[str]
@@ -270,7 +270,7 @@ class SourceType(DomainModelBase):
     _comment = "placeholder"
 
 
-@dataclass
+@dataclass(kw_only=True)
 class Source(DomainModelBase):
     id: str
     source_type_id: int
@@ -287,7 +287,7 @@ class Source(DomainModelBase):
     _comment = "placeholder"
 
 
-@dataclass
+@dataclass(kw_only=True)
 class Observation(DomainModelBase):
     id: str
     location: Geography
