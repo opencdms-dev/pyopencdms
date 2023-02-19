@@ -6,3 +6,4 @@ sphinxcontrib-mermaid
 sphinx-mdinclude
 twine
 pytest
+opencdms-test-data@git+https://github.com/opencdms/opencdms-test-data.git@main
