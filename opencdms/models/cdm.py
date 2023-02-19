@@ -25,8 +25,9 @@ from abc import ABC as AbstractBase
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import NewType, Optional
-
-Geography = NewType("Geography", str)
+from opencdms.types import Geography, Coordinates
+from shapely.geometry import Point
+from geoalchemy2.shape import from_shape, to_shape
 
 class DomainModelBase(AbstractBase):
     """
@@ -346,3 +347,13 @@ class Observation(DomainModelBase):
         "source_id": "The source of this record"
     }
     _comment = "table to store observations"
+
+    def set_location(cls,longitude: float, latitude: float):
+        """ Converts Point object to wkb srid 4326"""
+        return from_shape(Point(longitude,latitude),srid=4326)
+    
+    @property
+    def coordinates(self):
+        """  derives  longitude and latitude from location in srid 4326"""
+        point = to_shape(self.location)
+        return Coordinates(longitude=point.x,latitude=point.y) 
