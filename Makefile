@@ -86,7 +86,8 @@ install: clean ## install the package to the active Python's site-packages
 
 
 test-prepare: ## Step up db containers needed for tests
-	opencdms-test-data startdb
+	opencdms-test-data startdb --containers opencdms-db
+	
 	sleep 20
 
 test: test-prepare ## run tests quickly with the default Python
