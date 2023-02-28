@@ -10,6 +10,9 @@ webbrowser.open("file://" + pathname2url(os.path.abspath(sys.argv[1])))
 endef
 export BROWSER_PYSCRIPT
 
+### Export container ports ###
+export CDM_DB_PORT=35432
+
 define PRINT_HELP_PYSCRIPT
 import re, sys
 
