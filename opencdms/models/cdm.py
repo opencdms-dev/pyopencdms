@@ -45,10 +45,11 @@ class DomainModelBase(AbstractBase):
 
 @dataclass(kw_only=True)
 class ObservationType(DomainModelBase):
-    id: int
+
     name: str
     description: str
     links: Optional[dict]
+    id: Optional[int]
     _comments = {
         "id": "ID / primary key",
         "name": "Short name for observation type",
@@ -60,10 +61,10 @@ class ObservationType(DomainModelBase):
 
 @dataclass(kw_only=True)
 class FeatureType(DomainModelBase):
-    id: int
     name: str
     description: str
     links: Optional[dict]
+    id: Optional[int] = field(default=None)
     _comments = {
         "id": "ID / primary key",
         "name": "Short name for feature type",
@@ -120,9 +121,9 @@ class ObservingProcedure(DomainModelBase):
 
 @dataclass(kw_only=True)
 class RecordStatus(DomainModelBase):
-    id: int
     name: str
     description: str
+    id: Optional[int] = field(default=None)
     _comments = {
         "id": "ID / primary key",
         "name": "Short name for status",
@@ -133,10 +134,11 @@ class RecordStatus(DomainModelBase):
 
 @dataclass(kw_only=True)
 class TimeZone(DomainModelBase):
-    id: int
+
     abbreviation: str
     name: str
     offset: str
+    id: int = field(default=None)
     _comments = {
         "id": "ID / primary key",
         "abbreviation": "Abbreviation for time zone",
@@ -242,11 +244,11 @@ class Feature(DomainModelBase):
     id: str
     type_id: int
     geometry: Geography
-    elevation: Optional[float]
-    parent_id: Optional[str]
-    name: Optional[str]
-    description: Optional[str]
-    links: Optional[dict]
+    elevation: Optional[float] = field(default=None)
+    parent_id: Optional[str] = field(default=None)
+    name: Optional[str] 
+    description: Optional[str] 
+    links: Optional[dict] = field(default=None)
     _comments = {
         "id": "ID / primary key",
         "type_id": "enumerated feature type",
@@ -348,6 +350,7 @@ class Observation(DomainModelBase):
     }
     _comment = "table to store observations"
 
+    @classmethod
     def set_location(cls,longitude: float, latitude: float):
         """ Converts Point object to wkb srid 4326"""
         return from_shape(Point(longitude,latitude),srid=4326)
