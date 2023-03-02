@@ -12,7 +12,8 @@ export BROWSER_PYSCRIPT
 
 ### Export container ports ###
 export CDM_DB_PORT=35432
-
+export PYGEOAPI_CONFIG=$(PWD)/pygeoapi-config.yml
+export PYGEOAPI_OPENAPI=$(PWD)/pygeoapi-openapi.yml
 define PRINT_HELP_PYSCRIPT
 import re, sys
 
@@ -53,11 +54,11 @@ clean-test: ## remove test and coverage artifacts
 lint: ## check style with flake8
 	flake8 opencdms tests
 
-test-prepare: ## Step up db containers needed for tests
+startdb: ## Step up db containers needed for tests
 	opencdms-test-data startdb --containers opencdmsdb
 	sleep 20
 
-test: test-prepare ## run tests quickly with the default Python
+test: startdb ## run tests quickly with the default Python
 	pytest
 
 test-done: ## Bring down docker containers after test
@@ -93,3 +94,9 @@ dist: clean ## builds source and wheel package
 
 install: clean ## install the package to the active Python's site-packages
 	python setup.py install
+
+pygeoapi: ## Start pygeoapi default server
+	pygeoapi serve 
+
+seed: startdb ## Seed the database with random data
+	echo "NOT_IMPLEMENTED: seed the database with test observation data"

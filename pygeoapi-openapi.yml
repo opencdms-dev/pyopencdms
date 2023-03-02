@@ -181,10 +181,10 @@ paths:
       summary: Collections
       tags:
       - server
-  /collections/climsoft:
+  /collections/cdms:
     get:
-      description: Climsoft observations
-      operationId: describeClimsoftCollection
+      description: CDMS observations
+      operationId: describeCDMSCollection
       parameters:
       - $ref: '#/components/parameters/f'
       - $ref: '#/components/parameters/lang'
