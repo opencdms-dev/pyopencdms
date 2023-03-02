@@ -1,12 +1,11 @@
 from decimal import Decimal
 from pydantic import BaseModel,UUID4
-from typing import NewType, Optional, List, Dict
+from typing import NewType, Optional, List, Dict, Any
 from datetime import datetime
 
 from opencdms.types import Geography, Coordinates
 
 class CreateObservationSchema(BaseModel):
-    location: Geography
     version: int
     change_date: datetime
     phenomenon_end: datetime
@@ -17,9 +16,9 @@ class CreateObservationSchema(BaseModel):
     collection_id: str
     feature_of_interest_id: str
     report_id: Optional[str] = ""
-    user_id: Optional[int] = None
+    user_id: Optional[str] = None
     status_id: Optional[int] = None
-    source_id: Optional[int] = None
+    source_id: Optional[str] = None
     observed_property_id: Optional[int] = None
     parameter: Optional[dict] = None
     elevation: float = None
@@ -27,7 +26,7 @@ class CreateObservationSchema(BaseModel):
     phenomenon_start: Optional[datetime] = None
     result_uom: Optional[str] = ""
     result_description: Optional[str] = ""
-    result_quality: Optional[dict] = None
+    result_quality: Any #Optional[dict] = None
     result_time: Optional[datetime] = None
     valid_from: Optional[datetime] = None
     valid_to: Optional[datetime] = None

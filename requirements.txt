@@ -8,9 +8,9 @@ python-dotenv
 faker
 pydantic
 alchemyjsonschema
-click~=7.1.2
+click
 requests
 PyYAML
 django
-# pygeoapi@git+https://github.com/geopython/pygeoapi@0.13.0
+pygeoapi@git+https://github.com/geopython/pygeoapi@0.13.0
 shapely<2.0
