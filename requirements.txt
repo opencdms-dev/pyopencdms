@@ -1,16 +1,10 @@
-alembic
 pandas
 psycopg2
 geoalchemy2
-mysqlclient
 sqlalchemy~=1.4.22
 python-dotenv
-faker
 pydantic
-alchemyjsonschema
 click
 requests
-PyYAML
-django
 pygeoapi@git+https://github.com/geopython/pygeoapi@0.13.0
 shapely<2.0
