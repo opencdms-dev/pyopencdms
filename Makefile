@@ -95,8 +95,14 @@ dist: clean ## builds source and wheel package
 install: clean ## install the package to the active Python's site-packages
 	python setup.py install
 
+install-dev: install ## Install dev dependencies
+	pip install -r requirements_dev.txt
+	
 pygeoapi: ## Start pygeoapi default server
 	pygeoapi serve 
 
-seed: startdb ## Seed the database with random data
-	echo "NOT_IMPLEMENTED: seed the database with test observation data"
+seed-db: startdb ## Seed  database with random data
+	opencdms seed-db
+
+clear-db: ## Drops test database
+	opencdms clear-db
