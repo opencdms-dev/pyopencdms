@@ -43,7 +43,7 @@ class DomainModelBase(AbstractBase):
         return self._comments.get(column)
 
 
-@dataclass(kw_only=True)
+@dataclass()
 class ObservationType(DomainModelBase):
 
     name: str
@@ -59,7 +59,7 @@ class ObservationType(DomainModelBase):
     _comment = "placeholder"
 
 
-@dataclass(kw_only=True)
+@dataclass()
 class FeatureType(DomainModelBase):
     name: str
     description: str
@@ -74,7 +74,7 @@ class FeatureType(DomainModelBase):
     _comment = "placeholder"
 
 
-@dataclass(kw_only=True)
+@dataclass()
 class User(DomainModelBase):
     id: str
     name: str
@@ -85,7 +85,7 @@ class User(DomainModelBase):
     _comment = "placeholder"
 
 
-@dataclass(kw_only=True)
+@dataclass()
 class ObservedProperty(DomainModelBase):
     id: int
     short_name: str
@@ -104,7 +104,7 @@ class ObservedProperty(DomainModelBase):
     _comment = "placeholder"
 
 
-@dataclass(kw_only=True)
+@dataclass()
 class ObservingProcedure(DomainModelBase):
     id: int
     name: str
@@ -119,7 +119,7 @@ class ObservingProcedure(DomainModelBase):
     _comment = "placeholder"
 
 
-@dataclass(kw_only=True)
+@dataclass()
 class RecordStatus(DomainModelBase):
     name: str
     description: str
@@ -132,7 +132,7 @@ class RecordStatus(DomainModelBase):
     _comment = "placeholder"
 
 
-@dataclass(kw_only=True)
+@dataclass()
 class TimeZone(DomainModelBase):
 
     abbreviation: str
@@ -148,7 +148,7 @@ class TimeZone(DomainModelBase):
     _comment = "placeholder"
 
 
-@dataclass(kw_only=True)
+@dataclass()
 class Host(DomainModelBase):
     id: str
     name: str
@@ -195,7 +195,7 @@ class Host(DomainModelBase):
     _comment = "wmdr.observing_facility"
 
 
-@dataclass(kw_only=True)
+@dataclass()
 class Observer(DomainModelBase):
     id: str
     name: str
@@ -226,7 +226,7 @@ class Observer(DomainModelBase):
     _comment = "wmdr.equipment"
 
 
-@dataclass(kw_only=True)
+@dataclass()
 class Collection(DomainModelBase):
     id: str
     name: str
@@ -239,16 +239,16 @@ class Collection(DomainModelBase):
     _comment = "placeholder"
 
 
-@dataclass(kw_only=True)
+@dataclass()
 class Feature(DomainModelBase):
     id: str
     type_id: int
     geometry: Geography
-    elevation: Optional[float] = field(default=None)
-    parent_id: Optional[str] = field(default=None)
     name: Optional[str] 
     description: Optional[str] 
     links: Optional[dict] = field(default=None)
+    elevation: Optional[float] = field(default=None)
+    parent_id: Optional[str] = field(default=None)
     _comments = {
         "id": "ID / primary key",
         "type_id": "enumerated feature type",
@@ -262,7 +262,7 @@ class Feature(DomainModelBase):
     _comment = "table to contain definition of different geographic features"
 
 
-@dataclass(kw_only=True)
+@dataclass()
 class SourceType(DomainModelBase):
     id: str
     description: Optional[str]
@@ -273,7 +273,7 @@ class SourceType(DomainModelBase):
     _comment = "placeholder"
 
 
-@dataclass(kw_only=True)
+@dataclass()
 class Source(DomainModelBase):
     id: str
     source_type_id: int
@@ -290,7 +290,7 @@ class Source(DomainModelBase):
     _comment = "placeholder"
 
 
-@dataclass(kw_only=True)
+@dataclass()
 class Observation(DomainModelBase):
     id: str
     location: Geography
@@ -315,10 +315,10 @@ class Observation(DomainModelBase):
     feature_of_interest_id: Optional[str]
     version: int
     change_date: datetime
-    user_id: int
+    user_id: str
     status_id: int
     comments: str
-    source_id: int
+    source_id: str
     _comments = {
         "id": "ID / primary key",
         "location": "Location of observation",
