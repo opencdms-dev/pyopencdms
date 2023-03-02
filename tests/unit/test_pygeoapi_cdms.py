@@ -8,7 +8,13 @@ from opencdms.models import cdm
 from datetime import datetime,timedelta
 from uuid import uuid4
 from faker import Faker
-
+from cdms_pygeoapi import CDMSProvider
+from pygeoapi.provider.base import (
+    BaseProvider,
+    ProviderConnectionError,
+    ProviderQueryError,
+    ProviderItemNotFoundError,
+)
 DB_URL = get_cdm_connection_string()
 
 db_engine = create_engine(DB_URL)
@@ -171,12 +177,12 @@ def create_observations(db_session: Session):
     fake = Faker()
     Faker.seed(0)
     observations = []
-    # Create 5 observations from US coords
+    # Create 10 observations from US coords
     for _ in range(10):
         lat, lon = fake.local_latlng("US",True)
         obs = _create_observations(float(lon), float(lat))
         observations.append(obs)
-    # Create 5 obs from Nigeria
+    # Create 10 obs from Nigeria
     for _ in range(10):
         lat, lon = fake.local_latlng("NG",True)
         obs = _create_observations(float(lon), float(lat))
@@ -190,6 +196,87 @@ def test_create_observations(db_session):
     created = create_observations(db_session)
     assert created is True
 
-def test_query(db_session):
-    pass
 
+@pytest.fixture()
+def config():
+    return {
+        'name': 'PostgreSQL',
+        'type': 'feature',
+        'data': {'host': '127.0.0.1',
+                 'dbname': 'postgres',
+                 'user': 'postgres',
+                 "port": 35432,
+                 'password': "password",
+                 'search_path': ['cdm', 'public']
+                 },
+        'id_field': 'id',
+        'table': 'observation',
+        'geom_field': 'location'
+    }
+
+
+def test_query_should_show_selected_fields(config):
+    """Test query with select properties"""
+    p = CDMSProvider(config)
+    select_properties=['comments','host_id']
+    feature_collection = p.query(select_properties=select_properties)
+    assert feature_collection.get('type') == 'FeatureCollection'
+    features = feature_collection.get('features')
+    assert features is not None
+    feature = features[0]
+    properties = feature.get('properties')
+    assert select_properties[0] in properties.keys()
+    assert properties is not None
+    geometry = feature.get('geometry')
+    assert geometry is not None
+
+def test_query_with_property_filter(config):
+    """Test query valid features when filtering by property"""
+    p = CDMSProvider(config)
+    properties=[("result_description","A good result" )]
+    select_properties = ["result_description"]
+    feature_collection = p.query(properties=properties, select_properties=select_properties)
+    assert feature_collection.get('type') == 'FeatureCollection'
+    features = feature_collection.get('features')
+    assert features is not None
+    feature = features[0]
+    properties = feature.get('properties')
+    assert select_properties[0] in properties.keys()
+    assert properties is not None
+    geometry = feature.get('geometry')
+    assert geometry is not None
+
+
+def test_query_bbox(config):
+    """Test query with a specified bounding box """
+    p = CDMSProvider(config)
+    properties=[("result_description","A good result" )]
+    select_properties = ["result_description"]
+    NG_bbox = [ 2.69170169436, 4.24059418377, 14.5771777686, 13.8659239771 ] # Nigeria https://gist.github.com/graydon/11198540
+    feature_collection = p.query(bbox=NG_bbox)
+    features = feature_collection.get('features')
+    assert len(features) == 10
+
+def test_instantiation(config):
+    """Test attributes are correctly set during instantiation."""
+    # Act
+    provider =CDMSProvider(config)
+
+    # Assert
+    assert provider.name == "PostgreSQL"
+    assert provider.table == "observation"
+    assert provider.id_field == "id"
+
+
+def test_query_skip_geometry(config):
+    """Test query without geometry"""
+    p = CDMSProvider(config)
+    result = p.query(skip_geometry=True)
+    feature = result['features'][0]
+    assert feature['geometry'] is None
+
+def test_get_not_existing_item_raise_exception(config):
+    """Testing query for a not existing object"""
+    p = CDMSProvider(config)
+    with pytest.raises(ProviderItemNotFoundError):
+        p.get("2329039")
