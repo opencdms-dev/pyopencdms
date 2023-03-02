@@ -216,6 +216,7 @@ def config():
 
 
 def test_query_should_show_selected_fields(config):
+    # pytest.set_trace()
     """Test query with select properties"""
     p = CDMSProvider(config)
     select_properties=['comments','host_id']
