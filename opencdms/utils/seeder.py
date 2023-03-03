@@ -45,7 +45,7 @@ def seed_observations(db_session: Session):
         description="Valid record"
         )
     
-    time_zone = cdm.TimeZone(abbreviation="UTC",name="lagos/africa",offset="1")
+    time_zone = cdm.TimeZone(abbreviation="WAT",name="lagos/africa",offset="1")
     source_type = cdm.SourceType(
         id=str(uuid4()),
         description="A source type"
