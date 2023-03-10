@@ -1,1 +1,12 @@
-geoalchemy2>=0.13.0
+pandas
+psycopg2
+geoalchemy2
+sqlalchemy~=1.4.22
+python-dotenv
+faker
+pydantic
+click
+requests
+PyYAML
+pygeoapi@git+https://github.com/geopython/pygeoapi@0.13.0
+shapely<2.0

@@ -29,3 +29,36 @@ The [opencdms-test-data](https://github.com/opencdms/opencdms-test-data) reposit
 It is expected that SQLAlchemy objects, Panda's [DataFrames](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html) and JSON will be key data types for exchanging data.
 
 <!-- Geospatial dependencies like [PostGIS](http://postgis.net/), [GeoAlchemy2](https://github.com/geoalchemy/geoalchemy2) and [SpatiaLite](https://en.wikipedia.org/wiki/SpatiaLite) may be introduced in the future if required. -->
+
+
+### Launching Pygeoapi for development
+
+1. Install the package.
+```
+    make install-dev
+```
+2. Launch developement database
+
+```
+    make start-db
+```
+3. Seed the database with test data.
+```
+    make seed-db
+```
+4. Launch Pygeoapi server
+```
+    make pygeoapi
+```
+5. Visit localhost:5000 
+
+6. To stop the server, press CTRL+C
+
+7. Clear the test database 
+```
+    make clear-db
+```
+8. Remove the database container
+```
+    make stop-db
+```

@@ -10,6 +10,10 @@ webbrowser.open("file://" + pathname2url(os.path.abspath(sys.argv[1])))
 endef
 export BROWSER_PYSCRIPT
 
+### Export container ports ###
+export CDM_DB_PORT=35432
+export PYGEOAPI_CONFIG=$(PWD)/pygeoapi-config.yml
+export PYGEOAPI_OPENAPI=$(PWD)/pygeoapi-openapi.yml
 define PRINT_HELP_PYSCRIPT
 import re, sys
 
@@ -33,7 +37,7 @@ clean-build: ## remove build artifacts
 	rm -fr dist/
 	rm -fr .eggs/
 	find . -name '*.egg-info' -exec rm -fr {} +
-	find . -name '*.egg' -exec rm -f {} +
+	find . -name '*.egg' -exec rm -fr {} +
 
 clean-pyc: ## remove Python file artifacts
 	find . -name '*.pyc' -exec rm -f {} +
@@ -50,8 +54,15 @@ clean-test: ## remove test and coverage artifacts
 lint: ## check style with flake8
 	flake8 opencdms tests
 
-test: ## run tests quickly with the default Python
+startdb: ## Step up db containers needed for tests
+	opencdms-test-data startdb --containers opencdmsdb
+	sleep 20
+
+test: startdb ## run tests quickly with the default Python
 	pytest
+
+stop-db: ## Bring down docker containers after test
+	opencdms-test-data stopdb
 
 test-all: ## run tests on every Python version with tox
 	tox
@@ -83,3 +94,15 @@ dist: clean ## builds source and wheel package
 
 install: clean ## install the package to the active Python's site-packages
 	python setup.py install
+
+install-dev: install ## Install dev dependencies
+	pip install -r requirements_dev.txt
+	
+pygeoapi: ## Start pygeoapi default server
+	pygeoapi serve 
+
+seed-db: startdb ## Seed  database with random data
+	opencdms seed-db
+
+clear-db: ## Drops test database
+	opencdms clear-db

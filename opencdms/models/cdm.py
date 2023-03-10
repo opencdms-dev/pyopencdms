@@ -22,11 +22,12 @@
 # SOFTWARE.
 # =============================================================================
 from abc import ABC as AbstractBase
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
 from typing import NewType, Optional
-
-Geography = NewType("Geography", str)
+from opencdms.types import Geography, Coordinates
+from shapely.geometry import Point
+from geoalchemy2.shape import from_shape, to_shape
 
 class DomainModelBase(AbstractBase):
     """
@@ -42,12 +43,13 @@ class DomainModelBase(AbstractBase):
         return self._comments.get(column)
 
 
-@dataclass
+@dataclass()
 class ObservationType(DomainModelBase):
-    id: int
+
     name: str
     description: str
     links: Optional[dict]
+    id: Optional[int]
     _comments = {
         "id": "ID / primary key",
         "name": "Short name for observation type",
@@ -57,12 +59,12 @@ class ObservationType(DomainModelBase):
     _comment = "placeholder"
 
 
-@dataclass
+@dataclass()
 class FeatureType(DomainModelBase):
-    id: int
     name: str
     description: str
     links: Optional[dict]
+    id: Optional[int] = field(default=None)
     _comments = {
         "id": "ID / primary key",
         "name": "Short name for feature type",
@@ -72,7 +74,7 @@ class FeatureType(DomainModelBase):
     _comment = "placeholder"
 
 
-@dataclass
+@dataclass()
 class User(DomainModelBase):
     id: str
     name: str
@@ -83,7 +85,7 @@ class User(DomainModelBase):
     _comment = "placeholder"
 
 
-@dataclass
+@dataclass()
 class ObservedProperty(DomainModelBase):
     id: int
     short_name: str
@@ -102,7 +104,7 @@ class ObservedProperty(DomainModelBase):
     _comment = "placeholder"
 
 
-@dataclass
+@dataclass()
 class ObservingProcedure(DomainModelBase):
     id: int
     name: str
@@ -117,11 +119,11 @@ class ObservingProcedure(DomainModelBase):
     _comment = "placeholder"
 
 
-@dataclass
+@dataclass()
 class RecordStatus(DomainModelBase):
-    id: int
     name: str
     description: str
+    id: Optional[int] = field(default=None)
     _comments = {
         "id": "ID / primary key",
         "name": "Short name for status",
@@ -130,12 +132,13 @@ class RecordStatus(DomainModelBase):
     _comment = "placeholder"
 
 
-@dataclass
+@dataclass()
 class TimeZone(DomainModelBase):
-    id: int
+
     abbreviation: str
     name: str
     offset: str
+    id: int = field(default=None)
     _comments = {
         "id": "ID / primary key",
         "abbreviation": "Abbreviation for time zone",
@@ -145,7 +148,7 @@ class TimeZone(DomainModelBase):
     _comment = "placeholder"
 
 
-@dataclass
+@dataclass()
 class Host(DomainModelBase):
     id: str
     name: str
@@ -192,7 +195,7 @@ class Host(DomainModelBase):
     _comment = "wmdr.observing_facility"
 
 
-@dataclass
+@dataclass()
 class Observer(DomainModelBase):
     id: str
     name: str
@@ -223,7 +226,7 @@ class Observer(DomainModelBase):
     _comment = "wmdr.equipment"
 
 
-@dataclass
+@dataclass()
 class Collection(DomainModelBase):
     id: str
     name: str
@@ -236,16 +239,16 @@ class Collection(DomainModelBase):
     _comment = "placeholder"
 
 
-@dataclass
+@dataclass()
 class Feature(DomainModelBase):
     id: str
     type_id: int
     geometry: Geography
-    elevation: Optional[float]
-    parent_id: Optional[str]
-    name: Optional[str]
-    description: Optional[str]
-    links: Optional[dict]
+    name: Optional[str] 
+    description: Optional[str] 
+    links: Optional[dict] = field(default=None)
+    elevation: Optional[float] = field(default=None)
+    parent_id: Optional[str] = field(default=None)
     _comments = {
         "id": "ID / primary key",
         "type_id": "enumerated feature type",
@@ -259,7 +262,7 @@ class Feature(DomainModelBase):
     _comment = "table to contain definition of different geographic features"
 
 
-@dataclass
+@dataclass()
 class SourceType(DomainModelBase):
     id: str
     description: Optional[str]
@@ -270,7 +273,7 @@ class SourceType(DomainModelBase):
     _comment = "placeholder"
 
 
-@dataclass
+@dataclass()
 class Source(DomainModelBase):
     id: str
     source_type_id: int
@@ -287,7 +290,7 @@ class Source(DomainModelBase):
     _comment = "placeholder"
 
 
-@dataclass
+@dataclass()
 class Observation(DomainModelBase):
     id: str
     location: Geography
@@ -312,10 +315,10 @@ class Observation(DomainModelBase):
     feature_of_interest_id: Optional[str]
     version: int
     change_date: datetime
-    user_id: int
+    user_id: str
     status_id: int
     comments: str
-    source_id: int
+    source_id: str
     _comments = {
         "id": "ID / primary key",
         "location": "Location of observation",
@@ -346,3 +349,14 @@ class Observation(DomainModelBase):
         "source_id": "The source of this record"
     }
     _comment = "table to store observations"
+
+    @classmethod
+    def set_location(cls,longitude: float, latitude: float):
+        """ Converts Point object to wkb srid 4326"""
+        return from_shape(Point(longitude,latitude),srid=4326)
+    
+    @property
+    def coordinates(self):
+        """  derives  longitude and latitude from location in srid 4326"""
+        point = to_shape(self.location)
+        return Coordinates(longitude=point.x,latitude=point.y) 
