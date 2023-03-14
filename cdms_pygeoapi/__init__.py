@@ -10,19 +10,25 @@ from sqlalchemy.sql import asc, desc
 from opencdms.models import cdm as models
 from typing import Dict, List
 from alchemyjsonschema import SchemaFactory
-from alchemyjsonschema import ForeignKeyWalker
+from alchemyjsonschema import ForeignKeyWalker, default_column_to_schema
 from opencdms.utils.db import get_connection_string, get_count
-from opencdms.models import surface as models
 from opencdms.dtos.observation_schema import (
     ObservationSchema, CreateObservationSchema,
      UpdateObservationSchema, ObservationPygeoapiSchema
 )
-from shapely import box
+from shapely.geometry import box
 from geoalchemy2.shape import from_shape
 from pygeoapi.api import LOGGER
 from pygeoapi.provider.base import SchemaType
 from collections import OrderedDict
-
+from geoalchemy2 import Geography
+from sqlalchemy.dialects.postgresql.json import JSONB
+default_column_to_schema.update(
+        {
+            Geography : Geography,
+            JSONB: JSONB
+        }
+    )
 
 class DatabaseConnection:
     """Database connection class to be used as 'with' statement.
@@ -38,6 +44,7 @@ class DatabaseConnection:
     ):
         """
         PostgresProvider Class constructor returning
+
         :param conn_dic: dictionary with connection parameters
                     to be used by sqlalchemy
             dbname – the database name (database is a deprecated alias)
@@ -47,6 +54,7 @@ class DatabaseConnection:
              (defaults to UNIX socket if not provided)
             port – connection port number
              (defaults to 3306 if not provided)
+
         :param table: table name containing the data. This variable is used to
                 assemble column information
         :param properties: User-specified subset of column names to expose
@@ -107,8 +115,7 @@ class CDMSProvider(BaseProvider):
 
         if bbox is None:
             bbox = []
-
-        for k, v in properties:
+        for k,v in properties:
             if k in self.fields.keys():
                 query = query.filter(
                     getattr(
@@ -141,6 +148,7 @@ class CDMSProvider(BaseProvider):
     def get_fields(self):
         """
         Get provider field information (names, types)
+
         :returns: dict of fields
         """
         if not self.fields:
@@ -163,7 +171,7 @@ class CDMSProvider(BaseProvider):
     def query(
         self,
         startindex: int = 0,
-        limit: int = 0,
+        limit: int = 100,
         resulttype: str = "results",
         bbox: List = None,
         datetime=None,
@@ -176,6 +184,7 @@ class CDMSProvider(BaseProvider):
     ):
         """
         query the provider
+
         :returns: dict of 0..n GeoJSON features or coverage data
         """
 
@@ -191,7 +200,7 @@ class CDMSProvider(BaseProvider):
         if resulttype == "hits":
             with DatabaseConnection(
                 conn_dic=self.conn_dic,
-                properties=self.properties,
+                properties=select_properties,
                 context="hits",
             ) as db:
                 query = db.session.query(models.Observation)
@@ -205,7 +214,7 @@ class CDMSProvider(BaseProvider):
                 return self.__response_feature_hits(get_count(query))
 
         with DatabaseConnection(
-            conn_dic=self.conn_dic, properties=self.properties
+            conn_dic=self.conn_dic, properties=select_properties
         ) as db:
             try:
                 query = db.session.query(models.Observation)
@@ -244,10 +253,11 @@ class CDMSProvider(BaseProvider):
     def get(self, identifier, **kwargs):
         """
         query the provider by id
+
         :param identifier: feature id
         :returns: dict of single GeoJSON feature
         """
-
+    
         with DatabaseConnection(
             conn_dic=self.conn_dic, properties=self.properties
         ) as db:
@@ -279,6 +289,7 @@ class CDMSProvider(BaseProvider):
 
     def update(self, identifier, data):
         """Updates an existing feature id with new_feature
+
         :param identifier: feature id
         :param data: new GeoJSON feature dictionary
         """
@@ -295,6 +306,7 @@ class CDMSProvider(BaseProvider):
     def get_coverage_domainset(self):
         """
         Provide coverage domainset
+
         :returns: CIS JSON object of domainset metadata
         """
 
@@ -303,6 +315,7 @@ class CDMSProvider(BaseProvider):
     def get_coverage_rangetype(self):
         """
         Provide coverage rangetype
+
         :returns: CIS JSON object of rangetype metadata
         """
 
@@ -310,6 +323,7 @@ class CDMSProvider(BaseProvider):
 
     def delete(self, identifier):
         """Deletes an existing feature
+
         :param identifier: feature id
         """
         with DatabaseConnection(
@@ -327,7 +341,9 @@ class CDMSProvider(BaseProvider):
     def __response_feature(self, obs_final, skip_geometry, include: set = None):
         """
         Assembles GeoJSON output from DB query
+
         :param obs_final: DB row result
+
         :returns: `dict` of GeoJSON Feature
         """
         obs = ObservationSchema.from_orm(obs_final)
@@ -352,6 +368,7 @@ class CDMSProvider(BaseProvider):
         """Assembles GeoJSON/Feature number
         e.g: http://localhost:5000/collections/
         hotosm_bdi_waterways/items?resulttype=hits
+
         :returns: GeoJSON FeaturesCollection
         """
 
