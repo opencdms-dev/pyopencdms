@@ -62,7 +62,7 @@ class UpdateObservationSchema(BaseModel):
 
 
 class ObservationSchema(CreateObservationSchema):
-    id : UUID4
+    id : str
     coordinates: Coordinates
     class Config:
         orm_mode = True

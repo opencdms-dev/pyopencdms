@@ -23,13 +23,14 @@ from pygeoapi.provider.base import SchemaType
 from collections import OrderedDict
 from geoalchemy2 import Geography
 from sqlalchemy.dialects.postgresql.json import JSONB
+from opencdms.provider.opencdmsdb import start_mappers
 default_column_to_schema.update(
         {
             Geography : Geography,
             JSONB: JSONB
         }
     )
-
+start_mappers()
 class DatabaseConnection:
     """Database connection class to be used as 'with' statement.
     The class returns a connection object.
@@ -264,7 +265,7 @@ class CDMSProvider(BaseProvider):
             obs_final = (
                 db.session.query(models.Observation)
                 .filter_by(
-                    id=identifier
+                    id=str(identifier)
                 )
                 .first()
             )
@@ -338,7 +339,7 @@ class CDMSProvider(BaseProvider):
     def __repr__(self):
         return "<CDMSProvider> {}".format(self.type)
 
-    def __response_feature(self, obs_final, skip_geometry, include: set = None):
+    def __response_feature(self, obs_final, skip_geometry = None, include: set = None):
         """
         Assembles GeoJSON output from DB query
 
