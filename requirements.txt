@@ -3,6 +3,7 @@ psycopg2
 geoalchemy2
 sqlalchemy~=1.4.22
 python-dotenv
+alchemyjsonschema
 faker
 pydantic
 click
