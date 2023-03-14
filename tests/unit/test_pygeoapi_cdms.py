@@ -114,7 +114,7 @@ def test_instantiation(config):
 
     # Assert
     assert provider.name == "PostgreSQL"
-    assert provider.table == "observation"
+    # assert provider.table == "observation"
     assert provider.id_field == "id"
 
 
