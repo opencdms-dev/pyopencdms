@@ -37,11 +37,6 @@ setup(
         "Programming Language :: Python :: 3.9",
     ],
     description="OpenCDMS Python package",
-    entry_points={
-        "console_scripts": [
-            "opencdms=opencdms.cli:main",
-        ],
-    },
     install_requires=requirements,
     license="MIT license",
     long_description=readme + "\n\n" + history,
