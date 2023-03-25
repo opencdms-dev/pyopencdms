@@ -37,6 +37,11 @@ setup(
         "Programming Language :: Python :: 3.9",
     ],
     description="OpenCDMS Python package",
+    entry_points={
+        "console_scripts": [
+            "pyopencdms=opencdms_cli.cli:main",
+        ],
+    },
     install_requires=requirements,
     license="MIT license",
     long_description=readme + "\n\n" + history,
@@ -50,9 +55,4 @@ setup(
     url="https://github.com/opencdms/opencdms",
     version="0.1.0",
     zip_safe=False,
-    options={'bdist_wheel': {'universal': True}, 'build_scripts': {'executable': ''}},
 )
-
-# Important: 'build_scripts': {'executable': ''} prevents pip from creating an `opencdms`
-#            command line script that overwrites the one created by opencdms_cli if
-#            pyopencdms is installed second.
