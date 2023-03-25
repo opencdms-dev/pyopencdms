@@ -1,5 +1,12 @@
 #!/usr/bin/env python
-
+# When a binary distribution is created for pyopencdms, the `opencdms`
+# script created by the opencdms package is overwritten if pyopencdms
+# is installed after opencdms.
+# One workaround is to disable the creation of a binary distribution
+# using `[global] no_binary=opencdms` in setup.cfg
+# The alternative, used here, is to make the opencdms
+# script created by pyopencdms import the same cli
+# that the script created by opencdms would create.
 """The setup script."""
 
 from setuptools import setup, find_packages
@@ -39,7 +46,7 @@ setup(
     description="OpenCDMS Python package",
     entry_points={
         "console_scripts": [
-            "pyopencdms=opencdms_cli.cli:main",
+            "opencdms=opencdms_cli.cli:main",
         ],
     },
     install_requires=requirements,
