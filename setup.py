@@ -46,7 +46,7 @@ setup(
     description="OpenCDMS Python package",
     entry_points={
         "console_scripts": [
-            "opencdms=opencdms_cli.cli:main",
+            "pyopencdms=pyopencdms.cli:main",
         ],
     },
     install_requires=requirements,
@@ -54,12 +54,12 @@ setup(
     long_description=readme + "\n\n" + history,
     include_package_data=True,
     keywords="opencdms",
-    name="opencdms",
+    name="pyopencdms",
     packages=find_packages(),
     setup_requires=setup_requirements,
     test_suite="tests",
     tests_require=test_requirements,
-    url="https://github.com/opencdms/opencdms",
+    url="https://github.com/opencdms-dev/pyopencdms",
     version="0.1.0",
     zip_safe=False,
 )
